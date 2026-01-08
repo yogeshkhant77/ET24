@@ -3,6 +3,9 @@ import AppReducer from "./AppReducer";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
 
+// API base URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 // Load transactions from localStorage or use empty array
 const loadTransactions = () => {
   try {
@@ -50,7 +53,10 @@ export const GlobalProvider = ({ children }) => {
 
   async function getTransactions() {
     try {
-      const res = await axios.get("/api/v1/transactions", getAuthHeader());
+      const res = await axios.get(
+        `${API_BASE_URL}/api/v1/transactions`,
+        getAuthHeader()
+      );
       dispatch({
         type: "GET_TRANSACTIONS",
         payload: res.data.data,
@@ -65,7 +71,10 @@ export const GlobalProvider = ({ children }) => {
 
   async function deleteTransaction(id) {
     try {
-      await axios.delete(`/api/v1/transactions/${id}`, getAuthHeader());
+      await axios.delete(
+        `${API_BASE_URL}/api/v1/transactions/${id}`,
+        getAuthHeader()
+      );
 
       dispatch({
         type: "DELETE_TRANSACTION",
@@ -85,7 +94,7 @@ export const GlobalProvider = ({ children }) => {
   async function addTransaction(transaction) {
     try {
       const res = await axios.post(
-        "/api/v1/transactions",
+        `${API_BASE_URL}/api/v1/transactions`,
         transaction,
         getAuthHeader()
       );

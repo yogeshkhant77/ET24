@@ -3,6 +3,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
+const cors = require("cors");
 const connectDB = require("./config/db");
 
 const app = express();
@@ -16,19 +17,20 @@ const auth = require("./routes/auth");
 
 app.use(express.json());
 
+// Enable CORS for Vercel frontend
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "*",
+    credentials: true,
+  })
+);
+
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/transactions", transactions);
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-  app.get(/.*/, (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
 
 const PORT = process.env.PORT || 5000;
 

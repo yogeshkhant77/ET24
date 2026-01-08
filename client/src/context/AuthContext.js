@@ -1,5 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
 
+// API base URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -12,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = useCallback(async (username, mobile, password) => {
     try {
-      const response = await fetch("/api/v1/auth/register", {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = useCallback(async (mobile, password) => {
     try {
-      const response = await fetch("/api/v1/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
