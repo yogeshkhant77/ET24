@@ -18,12 +18,18 @@ const auth = require("./routes/auth");
 app.use(express.json());
 
 // Enable CORS for Vercel frontend
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "*",
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: [
+    "https://et-24.vercel.app",
+    "http://localhost:3000",
+    process.env.FRONTEND_URL,
+  ].filter(Boolean),
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
